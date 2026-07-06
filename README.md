@@ -58,5 +58,5 @@ Access the administrator dashboard via the **Admin** button in the top right:
 ---
 
 ## 🌐 To access Real-Time
- Open **[https://cozy-haven-56a1.onrender.com/)** in your browser!
+ Open **(https://cozy-haven-56a1.onrender.com/)** in your browser!
  
