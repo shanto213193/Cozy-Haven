@@ -1,0 +1,23 @@
+{
+  "admins": [
+    {
+      "username": "Shanto",
+      "password": "ShantolovesRasa"
+    }
+  ],
+  "channels": [
+    {
+      "id": "channel-1",
+      "name": "🍂 Cozy Cabin"
+    },
+    {
+      "id": "channel-2",
+      "name": "☕ Coffee Shop"
+    },
+    {
+      "id": "channel-3",
+      "name": "🌧️ Rainy Night"
+    }
+  ],
+  "chatHistory": []
+}

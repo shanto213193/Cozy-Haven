@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cozy Haven - Realtime Voice & Chat</title>
+  <!-- Google Fonts: Quicksand for cozy feel, Outfit for modern headings -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome for cute icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient background overlay -->
+  <div class="ambient-bg"></div>
+
+  <!-- App Wrapper -->
+  <div class="app-container">
+    
+    <!-- Top Header Bar -->
+    <header class="app-header">
+      <div class="header-logo">
+        <span class="logo-emoji">🍃</span>
+        <h1>Cozy Haven</h1>
+      </div>
+      <div class="header-actions">
+        <!-- Theme Selection Dropdown -->
+        <div class="theme-dropdown-container">
+          <button id="theme-selector-btn" class="header-btn" title="Choose Vibe">
+            <i class="fas fa-palette"></i>
+          </button>
+          <div id="theme-dropdown-menu" class="theme-dropdown-menu hidden">
+            <button class="theme-opt-btn" data-theme-val="classic">☕ Espresso</button>
+            <button class="theme-opt-btn" data-theme-val="rainy">🌧️ Rainy Storm</button>
+            <button class="theme-opt-btn" data-theme-val="sakura">🌸 Sakura</button>
+            <button class="theme-opt-btn" data-theme-val="forest">🍃 Forest Moss</button>
+            <button class="theme-opt-btn" data-theme-val="peach">🍊 Sunset Peach</button>
+          </div>
+        </div>
+
+        <!-- User Profile Quick Info -->
+        <div id="user-profile-trigger" class="user-profile-pill">
+          <span id="user-avatar" class="avatar-emoji">🍂</span>
+          <span id="user-display-name">Guest</span>
+        </div>
+
+        <!-- Admin Control Button -->
+        <button id="admin-dashboard-btn" class="header-btn admin-btn" title="Admin Panel">
+          <i class="fas fa-user-shield"></i>
+          <span>Admin</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace Grid -->
+    <main class="app-main">
+      
+      <!-- Panel 1: Sidebar (Channels & Users) -->
+      <section class="panel panel-left">
+        <div class="panel-section">
+          <div class="section-header">
+            <h3><i class="fas fa-volume-up"></i> Voice Channels</h3>
+          </div>
+          <!-- Current Active Connection Alert -->
+          <div id="active-voice-indicator" class="active-voice-banner hidden">
+            <div class="indicator-details">
+              <span class="pulse-dot"></span>
+              <span id="active-channel-name">Connected...</span>
+            </div>
+            <div class="indicator-controls">
+              <button id="toggle-mute-btn" class="indicator-control-btn" title="Mute Microphone">
+                <i class="fas fa-microphone"></i>
+              </button>
+              <button id="toggle-video-btn" class="indicator-control-btn" title="Toggle Camera">
+                <i class="fas fa-video-slash"></i>
+              </button>
+              <button id="disconnect-voice-btn" class="disconnect-btn" title="Leave Call">
+                <i class="fas fa-phone-slash"></i>
+              </button>
+            </div>
+          </div>
+          <div id="video-grid-container" class="video-grid-wrapper hidden">
+            <div id="video-grid" class="video-grid"></div>
+          </div>
+          <div id="voice-channels-list" class="channels-list">
+            <!-- Dynamic Channels Inserted Here -->
+            <div class="loading-placeholder">Loading channels...</div>
+          </div>
+        </div>
+
+        <div class="panel-section flex-grow">
+          <div class="section-header">
+            <h3><i class="fas fa-users"></i> Cozy Companions</h3>
+            <span id="online-count" class="badge">0</span>
+          </div>
+          <div id="online-users-list" class="users-list">
+            <!-- Dynamic Active Users List -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Panel 2: Center (Chatroom) -->
+      <section class="panel panel-center">
+        <div class="chat-header">
+          <div class="chat-title-info">
+            <h2>💬 Lobby Chat</h2>
+            <p>Talk with other companions from around the world</p>
+          </div>
+          <div class="chat-header-controls">
+            <div class="retention-selector">
+              <label for="chat-retention"><i class="fas fa-clock-rotate-left"></i> Keep:</label>
+              <select id="chat-retention" class="retention-dropdown">
+                <option value="forever">Stay Forever</option>
+                <option value="view">After Viewing</option>
+                <option value="24h">24 Hours</option>
+                <option value="7d">7 Days</option>
+              </select>
+            </div>
+            <button id="clear-chat-view-btn" class="chat-clear-view-btn" title="Clear Chat Screen locally">
+              <i class="fas fa-eraser"></i> Clear View
+            </button>
+          </div>
+        </div>
+        <div id="chat-messages" class="chat-messages-area">
+          <!-- Chat messages dynamically added here -->
+          <div class="welcome-message">
+            <span class="welcome-emoji">☕</span>
+            <h3>Welcome to Cozy Haven!</h3>
+            <p>Pull up a chair, make some tea, and start chatting with the community.</p>
+          </div>
+        </div>
+        
+        <!-- Emoji Quick Picker -->
+        <div class="quick-emojis">
+          <button class="emoji-btn">☕</button>
+          <button class="emoji-btn">🌧️</button>
+          <button class="emoji-btn">🍂</button>
+          <button class="emoji-btn">✨</button>
+          <button class="emoji-btn">🐱</button>
+          <button class="emoji-btn">💤</button>
+          <button class="emoji-btn">🍵</button>
+          <button class="emoji-btn">🔥</button>
+        </div>
+
+        <form id="chat-form" class="chat-input-area">
+          <input type="text" id="chat-input" placeholder="Whisper something cozy..." autocomplete="off" maxlength="300" required>
+          <button type="submit" class="send-btn" title="Send Message">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </form>
+      </section>
+
+      <!-- Panel 3: Right (Lofi Radio & Player) -->
+      <section class="panel panel-right">
+        <!-- Cozy Sounds Mixer -->
+        <div class="panel-section">
+          <div class="section-header">
+            <h3><i class="fas fa-sliders"></i> Cozy Atmosphere</h3>
+          </div>
+          <div class="ambient-mixer">
+            
+            <!-- Rain -->
+            <div class="mixer-track">
+              <div class="track-info">
+                <span class="track-emoji">🌧️</span>
+                <span class="track-name">Gentle Rain</span>
+              </div>
+              <div class="track-controls">
+                <button class="play-track-btn" data-sound="rain"><i class="fas fa-play"></i></button>
+                <input type="range" min="0" max="100" value="50" class="volume-slider" data-sound="rain" disabled>
+              </div>
+            </div>
+
+            <!-- Fireplace -->
+            <div class="mixer-track">
+              <div class="track-info">
+                <span class="track-emoji">🔥</span>
+                <span class="track-name">Campfire</span>
+              </div>
+              <div class="track-controls">
+                <button class="play-track-btn" data-sound="fire"><i class="fas fa-play"></i></button>
+                <input type="range" min="0" max="100" value="50" class="volume-slider" data-sound="fire" disabled>
+              </div>
+            </div>
+
+            <!-- Coffee Shop / Forest Whisper -->
+            <div class="mixer-track">
+              <div class="track-info">
+                <span class="track-emoji">🌲</span>
+                <span class="track-name">Forest Whisper</span>
+              </div>
+              <div class="track-controls">
+                <button class="play-track-btn" data-sound="cafe"><i class="fas fa-play"></i></button>
+                <input type="range" min="0" max="100" value="50" class="volume-slider" data-sound="cafe" disabled>
+              </div>
+            </div>
+
+            <!-- Lofi Beats -->
+            <div class="mixer-track">
+              <div class="track-info">
+                <span class="track-emoji">🎵</span>
+                <span class="track-name">Lofi Radio</span>
+              </div>
+              <div class="track-controls">
+                <button class="play-track-btn" data-sound="lofi"><i class="fas fa-play"></i></button>
+                <input type="range" min="0" max="100" value="50" class="volume-slider" data-sound="lofi" disabled>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Custom Video/Music Embedder -->
+        <div class="panel-section flex-grow">
+          <div class="section-header">
+            <h3><i class="fab fa-youtube"></i> Custom Music Player</h3>
+          </div>
+          <div class="custom-player-wrapper">
+            <p class="embed-hint">Paste a YouTube Video URL or Spotify Embed Link below to play custom tunes.</p>
+            <div class="embed-input-row">
+              <input type="text" id="music-embed-input" placeholder="YouTube or Spotify link...">
+              <button id="load-embed-btn" class="embed-load-btn">Load</button>
+            </div>
+            <div id="media-embed-container" class="embed-container empty">
+              <div class="embed-placeholder">
+                <i class="fas fa-music"></i>
+                <span>No custom track loaded</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Developed by Shanto Footer -->
+    <footer class="app-footer">
+      <p>🍃 Developed with tea and lofi by <strong class="author-lock">Shanto</strong> — All Rights Reserved &copy; 2026</p>
+    </footer>
+  </div>
+
+  <!-- Audio Elements for mixer loops -->
+  <audio id="audio-rain" loop src="assets/sounds/rain.mp3"></audio>
+  <audio id="audio-fire" loop src="assets/sounds/fire.mp3"></audio>
+  <audio id="audio-cafe" loop src="assets/sounds/cafe.mp3"></audio>
+  <!-- Free royalty-free ambient lofi track loop -->
+  <audio id="audio-lofi" loop src="assets/sounds/lofi.mp3"></audio>
+
+  <!-- Container for remote WebRTC audio streams -->
+  <div id="remote-audios-container" style="display:none;"></div>
+
+  <!-- MODAL 1: Edit Profile -->
+  <div id="profile-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Set Your Cozy Vibe</h2>
+        <button class="close-modal-btn" data-modal="profile-modal"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="avatar-preview-section">
+          <span id="profile-modal-avatar-preview" class="avatar-huge">🍂</span>
+          <p>Choose an Emoji Avatar</p>
+          <div class="emoji-grid">
+            <button class="avatar-choice-btn">🍂</button>
+            <button class="avatar-choice-btn">☕</button>
+            <button class="avatar-choice-btn">🦊</button>
+            <button class="avatar-choice-btn">🐱</button>
+            <button class="avatar-choice-btn">🌧️</button>
+            <button class="avatar-choice-btn">🍵</button>
+            <button class="avatar-choice-btn">🌱</button>
+            <button class="avatar-choice-btn">🌙</button>
+            <button class="avatar-choice-btn">🎹</button>
+            <button class="avatar-choice-btn">🧸</button>
+            <button class="avatar-choice-btn">🏠</button>
+            <button class="avatar-choice-btn">🦉</button>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="profile-username-input">Cozy Nickname</label>
+          <input type="text" id="profile-username-input" placeholder="e.g. Dreamer" maxlength="15">
+        </div>
+        <button id="save-profile-btn" class="modal-primary-btn">Enter Haven</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Admin Dashboard (Authentication + Control Panel) -->
+  <div id="admin-modal" class="modal-overlay hidden">
+    <div class="modal-content admin-modal-content">
+      <div class="modal-header">
+        <h2><i class="fas fa-user-shield"></i> Admin Dashboard</h2>
+        <button class="close-modal-btn" data-modal="admin-modal"><i class="fas fa-times"></i></button>
+      </div>
+      
+      <!-- Login Interface -->
+      <div id="admin-login-view" class="modal-body">
+        <p class="admin-hint">Please sign in with your administrator credentials to access dashboard controls.</p>
+        <div id="admin-login-error" class="form-error hidden"></div>
+        <div class="input-group">
+          <label for="admin-username">Username</label>
+          <input type="text" id="admin-username" placeholder="Enter username">
+        </div>
+        <div class="input-group">
+          <label for="admin-password">Password</label>
+          <input type="password" id="admin-password" placeholder="Enter password">
+        </div>
+        <button id="submit-admin-login-btn" class="modal-primary-btn admin-login-action-btn">Authenticate</button>
+      </div>
+
+      <!-- Dashboard Panel View (hidden until authenticated) -->
+      <div id="admin-dashboard-view" class="modal-body hidden">
+        <div class="admin-nav-tabs">
+          <button class="admin-tab-btn active" data-tab="channels-tab">Manage Channels</button>
+          <button class="admin-tab-btn" data-tab="admins-tab">Manage Admins</button>
+          <button class="admin-tab-btn" data-tab="moderation-tab">Active Users</button>
+        </div>
+
+        <div class="admin-tab-content">
+          
+          <!-- Channels Tab -->
+          <div id="channels-tab" class="tab-pane active">
+            <h3>Create New Voice Channel</h3>
+            <div class="create-channel-form">
+              <input type="text" id="new-channel-name" placeholder="e.g., 🌲 Whispering Woods" maxlength="25">
+              <button id="create-channel-btn" class="admin-action-btn">Create</button>
+            </div>
+            <hr class="admin-divider">
+            <h3>Current Channels</h3>
+            <div id="admin-channels-list" class="admin-list">
+              <!-- Dynamically rendered channels with delete options -->
+            </div>
+          </div>
+
+          <!-- Admins Tab -->
+          <div id="admins-tab" class="tab-pane">
+            <h3>Add New Admin</h3>
+            <div id="add-admin-error" class="form-error hidden"></div>
+            <div class="add-admin-form">
+              <input type="text" id="new-admin-username" placeholder="Username" maxlength="15">
+              <input type="password" id="new-admin-password" placeholder="Password">
+              <button id="add-admin-btn" class="admin-action-btn">Add Admin</button>
+            </div>
+            <hr class="admin-divider">
+            <h3>Active Administrators</h3>
+            <div id="admin-users-list" class="admin-list">
+              <!-- List of active admins with delete options -->
+            </div>
+          </div>
+
+          <!-- Moderation Tab -->
+          <div id="moderation-tab" class="tab-pane">
+            <h3>Server Chat Management</h3>
+            <p class="tab-subtitle">This action permanently deletes all messages from the database for everyone.</p>
+            <button id="admin-clear-chat-btn" class="admin-action-danger-btn">
+              <i class="fas fa-trash-can"></i> Clear All Chat History
+            </button>
+            <hr class="admin-divider">
+            <h3>Online Connections</h3>
+            <p class="tab-subtitle">You can disconnect/kick disruptive users from the server.</p>
+            <div id="admin-moderation-list" class="admin-list">
+              <!-- Active socket connections list with kick button -->
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-footer">
+          <span class="logged-in-as">Logged in as: <strong id="logged-admin-name">Shanto</strong></span>
+          <button id="admin-logout-btn" class="admin-logout-btn">Log Out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating AI Companion Toggle Button -->
+  <button id="ai-toggle-btn" class="ai-toggle-floating-btn" title="Toggle AI Auto-Reply">
+    <i class="fas fa-robot"></i>
+    <span class="pulse-ring"></span>
+  </button>
+
+  <!-- Socket.io Client -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- GSAP for cute animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <!-- App JS Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
