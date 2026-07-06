@@ -54,18 +54,9 @@ Make sure you have [Node.js](https://nodejs.org) installed on your system.
 
 ## 🔑 Admin Credentials
 Access the administrator dashboard via the **Admin** button in the top right:
-* **Username:** `Shanto`
-* **Password:** `ShantolovesRasa`
 
 ---
 
-## 🌐 Free Cloud Deployment (Render.com)
-
-1. Create a blank repository on your GitHub account and push this directory to it.
-2. Go to [Render.com](https://render.com) and log in with GitHub.
-3. Create a new **Web Service** and connect your repository.
-4. Set the following configurations:
-   * **Runtime:** `Node`
-   * **Build Command:** `npm install`
-   * **Start Command:** `node server.js`
-5. Select the **Free Tier** and deploy! 
+## 🌐 To access Real-Time
+ Open **[https://cozy-haven-56a1.onrender.com/)** in your browser!
+ 
